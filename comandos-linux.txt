@@ -1,3 +1,7 @@
-comandos linux
-sannjsa
-sadsds
+hostname # como se llama este servidor 
+pwd # carpeta actual
+uname # que sistema operativo o version
+uptime # hace cuanto esta encendido 
+df -h # mirar el estado del disco o filesystem
+free -h # Memoria
+nproc # mirar el procesador de la maquina
