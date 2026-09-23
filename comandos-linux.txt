@@ -5,3 +5,11 @@ uptime # hace cuanto esta encendido
 df -h # mirar el estado del disco o filesystem
 free -h # Memoria
 nproc # mirar el procesador de la maquina
+# yum instalacion paquetes
+# mkdir -p test1/{web,datos,logs} sirve para crear muliples capertas simultanea
+# cd test1 && ls -R
+# cd = entrar 📂
+# && = si funciona, continúa ➡️
+# ls -R = listar todo hacia abajo 📋
+# echo " Bienvenido a mi web" > web /inder.html
+# ls -lh web nos muestra informacion de la pagina peso y permisos
