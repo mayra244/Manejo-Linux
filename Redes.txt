@@ -1,0 +1,5 @@
+ping google.com # cuanto tarda (ctrl+c para parar)
+curl ifconfig.me # cual es mi IP publica
+nsloookup google.com # el DNS en accion: nombre IP
+ss -tuln que puertos tengo abiertos 
+
