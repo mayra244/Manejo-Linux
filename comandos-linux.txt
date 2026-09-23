@@ -13,5 +13,5 @@ nproc # mirar el procesador de la maquina
 # ls -R = listar todo hacia abajo 📋
 # echo " Bienvenido a mi web" > web /inder.html
 # ls -lh web nos muestra informacion de la pagina peso y permisos
-# cat sirve para visualizar
+
 
