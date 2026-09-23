@@ -14,4 +14,4 @@ nproc # mirar el procesador de la maquina
 # echo " Bienvenido a mi web" > web /inder.html
 # ls -lh web nos muestra informacion de la pagina peso y permisos
 # cat sirve para visualizar
-
+# git pull origin main sirve para actualizar visual code cuando se haga modificacion del github
