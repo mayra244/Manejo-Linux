@@ -1,550 +1,272 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>INDER · Matrículas Educación Tecnológica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#12203A; --paper:#F6F3EC; --graphite:#23262B; --teal:#2F6F62;
+  --amber:#E2A73E; --line:#7C93A6; --white:#fff;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+body{background:var(--paper); color:var(--graphite); font-family:'IBM Plex Sans',sans-serif; line-height:1.5; overflow-x:hidden;}
+h1,h2,h3{font-family:'Fraunces',serif; font-weight:600; letter-spacing:-0.01em;}
+.code{font-family:'IBM Plex Mono',monospace;}
+.wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
 
-    <title>Matrícula Académica - Tecnología</title>
+/* Header */
+header{position:sticky; top:0; z-index:10; background:rgba(246,243,236,0.92); backdrop-filter:blur(6px); border-bottom:1px solid rgba(18,32,58,0.1); padding:env(safe-area-inset-top,0px) 0 0;}
+.nav{display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1080px; margin:0 auto;}
+.logo{font-family:'Fraunces',serif; font-weight:700; font-size:1.3rem; color:var(--ink);}
+.logo span{color:var(--amber);}
+nav ul{display:flex; gap:28px; list-style:none;}
+nav a{color:var(--graphite); text-decoration:none; font-size:0.95rem;}
+nav a:hover{color:var(--teal);}
+.nav-cta{background:var(--ink); color:var(--white); padding:9px 18px; border-radius:3px; text-decoration:none; font-size:0.9rem; font-weight:500;}
+.nav-links{display:flex; align-items:center; gap:28px;}
+@media (max-width:720px){ nav ul{display:none;} }
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+/* Hero */
+.hero{background:var(--ink); color:var(--white); position:relative; overflow:hidden; padding:88px 0 96px;}
+.blueprint{position:absolute; inset:0; opacity:0.14;
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:44px 44px;}
+.hero-inner{position:relative; display:grid; grid-template-columns:1.3fr 1fr; gap:40px; align-items:end;}
+@media (max-width:820px){ .hero-inner{grid-template-columns:1fr;} }
+.term-tag{display:inline-block; border:1px solid rgba(255,255,255,0.35); color:var(--amber); font-family:'IBM Plex Mono',monospace; font-size:0.78rem; padding:5px 10px; border-radius:3px; margin-bottom:20px;}
+.hero h1{font-size:clamp(2.3rem,5vw,3.6rem); line-height:1.05; max-width:11ch;}
+.hero p{margin-top:20px; max-width:44ch; color:rgba(255,255,255,0.78); font-size:1.05rem;}
+.hero-actions{margin-top:32px; display:flex; gap:16px; flex-wrap:wrap;}
+.btn-primary{background:var(--amber); color:var(--ink); font-weight:600; padding:14px 26px; border-radius:3px; text-decoration:none; border:none; font-size:1rem; cursor:pointer;}
+.btn-primary:hover{background:#eeb85a;}
+.btn-ghost{border:1px solid rgba(255,255,255,0.4); color:var(--white); padding:13px 24px; border-radius:3px; text-decoration:none; font-size:1rem;}
+.hero-figures{display:flex; flex-direction:column; gap:18px; border-left:1px solid rgba(255,255,255,0.2); padding-left:28px;}
+.fig b{display:block; font-family:'Fraunces',serif; font-size:2.1rem; color:var(--amber);}
+.fig span{font-size:0.88rem; color:rgba(255,255,255,0.65);}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            color: #333;
-        }
+/* Section headers */
+.section{padding:80px 0;}
+.section-head{max-width:56ch; margin-bottom:44px;}
+.eyebrow-line{width:36px; height:2px; background:var(--teal); margin-bottom:16px;}
+.section-head h2{font-size:clamp(1.7rem,3vw,2.3rem);}
+.section-head p{margin-top:12px; color:#565A5F; max-width:50ch;}
 
-        header {
-            background: #123c69;
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
+/* Programs */
+.programs{background:var(--paper);}
+.grid-programs{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:rgba(18,32,58,0.14); border:1px solid rgba(18,32,58,0.14);}
+@media (max-width:720px){ .grid-programs{grid-template-columns:1fr;} }
+.pcard{background:var(--paper); padding:30px; position:relative;}
+.pcard .code{color:var(--teal); font-size:0.82rem;}
+.pcard h3{margin-top:10px; font-size:1.25rem;}
+.pcard p{margin-top:10px; color:#565A5F; font-size:0.94rem;}
+.pcard .meta{margin-top:16px; display:flex; gap:16px; font-size:0.82rem; color:var(--ink); font-family:'IBM Plex Mono',monospace;}
 
-        header h1 {
-            margin: 0;
-            font-size: 30px;
-        }
+/* Process */
+.process{background:var(--ink); color:var(--white);}
+.process .section-head p{color:rgba(255,255,255,0.65);}
+.process .eyebrow-line{background:var(--amber);}
+.steps{display:grid; grid-template-columns:repeat(4,1fr); gap:0;}
+@media (max-width:820px){ .steps{grid-template-columns:1fr 1fr;} }
+.step{border-top:2px solid rgba(255,255,255,0.25); padding-top:18px; padding-right:20px;}
+.step b{font-family:'IBM Plex Mono',monospace; color:var(--amber); font-size:0.85rem;}
+.step h3{margin-top:10px; font-size:1.05rem; font-family:'IBM Plex Sans',sans-serif; font-weight:600;}
+.step p{margin-top:8px; font-size:0.9rem; color:rgba(255,255,255,0.68);}
 
-        header p {
-            margin: 8px 0 0;
-            font-size: 16px;
-        }
+/* Benefits */
+.benefits{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+@media (max-width:820px){ .benefits{grid-template-columns:1fr;} }
+.benefit{border-left:2px solid var(--teal); padding-left:18px;}
+.benefit h3{font-size:1.05rem; font-family:'IBM Plex Sans',sans-serif; font-weight:600;}
+.benefit p{margin-top:8px; color:#565A5F; font-size:0.92rem;}
 
-        .contenedor {
-            width: 90%;
-            max-width: 1100px;
-            margin: 30px auto;
-        }
+/* Enrollment form */
+.enroll{background:var(--teal); color:var(--white);}
+.enroll-inner{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
+@media (max-width:820px){ .enroll-inner{grid-template-columns:1fr;} }
+.enroll h2{font-size:clamp(1.7rem,3vw,2.3rem);}
+.enroll p{margin-top:14px; color:rgba(255,255,255,0.85); max-width:42ch;}
+form{display:flex; flex-direction:column; gap:14px;}
+.field label{display:block; font-size:0.82rem; margin-bottom:6px; color:rgba(255,255,255,0.85);}
+.field input, .field select{width:100%; padding:12px 14px; border:1px solid rgba(255,255,255,0.4); background:rgba(255,255,255,0.08); color:var(--white); border-radius:3px; font-family:inherit; font-size:0.95rem;}
+.field input::placeholder{color:rgba(255,255,255,0.5);}
+.field select option{color:var(--graphite);}
+.field input:focus, .field select:focus{outline:2px solid var(--amber); outline-offset:1px;}
+.submit-btn{margin-top:6px;}
+.confirm{display:none; margin-top:16px; padding:14px 16px; background:rgba(255,255,255,0.12); border-radius:3px; font-size:0.92rem;}
+.confirm.show{display:block;}
 
-        .tarjeta {
-            background: white;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-        }
+footer{background:var(--ink); color:rgba(255,255,255,0.65); padding:40px 0; font-size:0.88rem;}
+.foot-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;}
+.foot-inner b{color:var(--white); font-family:'Fraunces',serif;}
 
-        .tarjeta h2 {
-            margin-top: 0;
-            color: #123c69;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-        }
-
-        .datos {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .campo {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .campo label {
-            font-weight: bold;
-            margin-bottom: 7px;
-        }
-
-        .campo input,
-        .campo select {
-            padding: 11px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 15px;
-        }
-
-        .materias {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .materias th,
-        .materias td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        .materias th {
-            background: #e9eef5;
-            color: #123c69;
-        }
-
-        .materias tr:hover {
-            background: #f8f9fa;
-        }
-
-        .resumen {
-            background: #eef5ff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        .boton {
-            background: #123c69;
-            color: white;
-            border: none;
-            padding: 13px 25px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .boton:hover {
-            background: #0d2e50;
-        }
-
-        .mensaje {
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        @media (max-width: 700px) {
-
-            .datos {
-                grid-template-columns: 1fr;
-            }
-
-            .materias {
-                font-size: 14px;
-            }
-
-            .materias th,
-            .materias td {
-                padding: 8px;
-            }
-        }
-    </style>
+@media (prefers-reduced-motion: no-preference){
+  .hero h1, .hero p, .hero-actions{animation:rise 0.7s ease both;}
+  .hero p{animation-delay:0.08s;} .hero-actions{animation-delay:0.16s;}
+  @keyframes rise{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+}
+</style>
 </head>
-
 <body>
 
 <header>
-
-    <h1>🎓 Matrícula Académica</h1>
-
-    <p>Programa de Tecnología</p>
-
+  <div class="nav">
+    <div class="logo">INDER<span>·</span>Tech</div>
+    <div class="nav-links">
+      <ul>
+        <li><a href="#programas">Programas</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+        <li><a href="#matricula">Matrícula</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <a class="nav-cta" href="#matricula">Matricúlate</a>
+    </div>
+  </div>
 </header>
 
-
-<div class="contenedor">
-
-
-    <!-- DATOS DEL ESTUDIANTE -->
-
-    <div class="tarjeta">
-
-        <h2>Datos del estudiante</h2>
-
-        <div class="datos">
-
-            <div class="campo">
-
-                <label>Nombre completo</label>
-
-                <input
-                    type="text"
-                    id="nombre"
-                    placeholder="Ingrese su nombre"
-                >
-
-            </div>
-
-
-            <div class="campo">
-
-                <label>Documento de identidad</label>
-
-                <input
-                    type="text"
-                    id="documento"
-                    placeholder="Ingrese su documento"
-                >
-
-            </div>
-
-
-            <div class="campo">
-
-                <label>Programa académico</label>
-
-                <select id="programa">
-
-                    <option value="">Seleccione</option>
-
-                    <option>Tecnología en Sistemas</option>
-
-                    <option>Tecnología en Desarrollo de Software</option>
-
-                    <option>Tecnología en Redes</option>
-
-                    <option>Tecnología en Gestión Administrativa</option>
-
-                </select>
-
-            </div>
-
-
-            <div class="campo">
-
-                <label>Semestre</label>
-
-                <select id="semestre">
-
-                    <option value="">Seleccione</option>
-
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-
-                </select>
-
-            </div>
-
-
-            <div class="campo">
-
-                <label>Periodo académico</label>
-
-                <select id="periodo">
-
-                    <option value="">Seleccione</option>
-
-                    <option>2026-1</option>
-                    <option>2026-2</option>
-                    <option>2027-1</option>
-                    <option>2027-2</option>
-
-                </select>
-
-            </div>
-
-        </div>
-
+<section class="hero">
+  <div class="blueprint"></div>
+  <div class="wrap hero-inner">
+    <div>
+      <span class="term-tag">Matrículas 2026-2 · Cupos limitados</span>
+      <h1>Fórmate en la tecnología que mueve la industria</h1>
+      <p>Programas técnicos y tecnológicos en software, redes, ciberseguridad e inteligencia artificial, con docentes en ejercicio y prácticas garantizadas.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#matricula">Matricúlate ahora</a>
+        <a class="btn-ghost" href="#programas">Ver programas</a>
+      </div>
     </div>
-
-
-    <!-- ASIGNATURAS -->
-
-    <div class="tarjeta">
-
-        <h2>Asignaturas disponibles</h2>
-
-        <table class="materias">
-
-            <thead>
-
-                <tr>
-
-                    <th>Seleccionar</th>
-
-                    <th>Código</th>
-
-                    <th>Asignatura</th>
-
-                    <th>Créditos</th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                <tr>
-
-                    <td>
-                        <input
-                            type="checkbox"
-                            class="materia"
-                            data-nombre="Introducción a la Programación"
-                            data-creditos="3"
-                        >
-                    </td>
-
-                    <td>PROG101</td>
-
-                    <td>Introducción a la Programación</td>
-
-                    <td>3</td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        <input
-                            type="checkbox"
-                            class="materia"
-                            data-nombre="Bases de Datos"
-                            data-creditos="3"
-                        >
-                    </td>
-
-                    <td>BD102</td>
-
-                    <td>Bases de Datos</td>
-
-                    <td>3</td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        <input
-                            type="checkbox"
-                            class="materia"
-                            data-nombre="Redes de Computadores"
-                            data-creditos="3"
-                        >
-                    </td>
-
-                    <td>RED103</td>
-
-                    <td>Redes de Computadores</td>
-
-                    <td>3</td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        <input
-                            type="checkbox"
-                            class="materia"
-                            data-nombre="Sistemas Operativos"
-                            data-creditos="3"
-                        >
-                    </td>
-
-                    <td>SO104</td>
-
-                    <td>Sistemas Operativos</td>
-
-                    <td>3</td>
-
-                </tr>
-
-
-                <tr>
-
-                    <td>
-                        <input
-                            type="checkbox"
-                            class="materia"
-                            data-nombre="Matemáticas"
-                            data-creditos="3"
-                        >
-                    </td>
-
-                    <td>MAT105</td>
-
-                    <td>Matemáticas</td>
-
-                    <td>3</td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-
-        <div class="resumen">
-
-            <strong>Resumen de matrícula</strong>
-
-            <p>
-                Materias seleccionadas:
-                <span id="cantidad">0</span>
-            </p>
-
-            <p>
-                Total de créditos:
-                <span id="creditos">0</span>
-            </p>
-
-        </div>
-
+    <div class="hero-figures">
+      <div class="fig"><b>8</b><span>programas tecnológicos activos</span></div>
+      <div class="fig"><b>92%</b><span>de egresados vinculados en el primer año</span></div>
+      <div class="fig"><b>45</b><span>empresas aliadas para prácticas</span></div>
     </div>
+  </div>
+</section>
 
-
-    <!-- BOTÓN -->
-
-    <div class="tarjeta">
-
-        <button
-            class="boton"
-            onclick="matricular()"
-        >
-            Matricular asignaturas
-        </button>
-
-        <div
-            id="mensaje"
-            class="mensaje"
-        ></div>
-
+<section class="section programs" id="programas">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow-line"></div>
+      <h2>Elige tu programa</h2>
+      <p>Formación técnica laboral y tecnológica con salidas parciales y homologación entre niveles.</p>
     </div>
+    <div class="grid-programs">
+      <div class="pcard">
+        <span class="code">TEC-101</span>
+        <h3>Desarrollo de Software</h3>
+        <p>Construcción de aplicaciones web y móviles, bases de datos y control de versiones.</p>
+        <div class="meta"><span>18 meses</span><span>Presencial</span></div>
+      </div>
+      <div class="pcard">
+        <span class="code">TEC-204</span>
+        <h3>Redes y Telecomunicaciones</h3>
+        <p>Diseño, instalación y mantenimiento de infraestructuras de red cableadas e inalámbricas.</p>
+        <div class="meta"><span>16 meses</span><span>Mixto</span></div>
+      </div>
+      <div class="pcard">
+        <span class="code">TEC-318</span>
+        <h3>Ciberseguridad</h3>
+        <p>Protección de sistemas, análisis de vulnerabilidades y gestión de incidentes.</p>
+        <div class="meta"><span>16 meses</span><span>Presencial</span></div>
+      </div>
+      <div class="pcard">
+        <span class="code">TEC-422</span>
+        <h3>Inteligencia Artificial Aplicada</h3>
+        <p>Modelos de aprendizaje automático aplicados a proyectos reales de industria.</p>
+        <div class="meta"><span>18 meses</span><span>Mixto</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-</div>
+<section class="section process" id="proceso">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow-line"></div>
+      <h2>Así es el proceso de matrícula</h2>
+      <p>Cuatro pasos, del registro al primer día de clase.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><b>01</b><h3>Inscripción en línea</h3><p>Completa el formulario con tus datos y el programa de interés.</p></div>
+      <div class="step"><b>02</b><h3>Entrega de documentos</h3><p>Envía tu cédula, diploma de bachiller y foto por el portal.</p></div>
+      <div class="step"><b>03</b><h3>Pago de matrícula</h3><p>Realiza el pago en línea o en puntos autorizados.</p></div>
+      <div class="step"><b>04</b><h3>Inicio de clases</h3><p>Recibe tu horario y accede a la plataforma académica.</p></div>
+    </div>
+  </div>
+</section>
 
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow-line"></div>
+      <h2>Por qué estudiar en INDER Tech</h2>
+    </div>
+    <div class="benefits">
+      <div class="benefit"><h3>Docentes en ejercicio</h3><p>Aprende con profesionales que trabajan activamente en la industria tecnológica.</p></div>
+      <div class="benefit"><h3>Prácticas garantizadas</h3><p>Convenios con empresas del sector para que hagas tu práctica desde el segundo semestre.</p></div>
+      <div class="benefit"><h3>Créditos flexibles</h3><p>Planes de financiación y descuentos por pronto pago o convenio con tu empresa.</p></div>
+    </div>
+  </div>
+</section>
 
-<footer>
+<section class="section enroll" id="matricula">
+  <div class="wrap enroll-inner">
+    <div>
+      <h2>Reserva tu cupo</h2>
+      <p>Diligencia tus datos y un asesor académico te contactará en menos de 24 horas para completar tu matrícula.</p>
+    </div>
+    <form id="enrollForm">
+      <div class="field">
+        <label for="nombre">Nombre completo</label>
+        <input id="nombre" type="text" placeholder="Tu nombre y apellido" required>
+      </div>
+      <div class="field">
+        <label for="correo">Correo electrónico</label>
+        <input id="correo" type="email" placeholder="tucorreo@ejemplo.com" required>
+      </div>
+      <div class="field">
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" type="tel" placeholder="300 000 0000" required>
+      </div>
+      <div class="field">
+        <label for="programa">Programa de interés</label>
+        <select id="programa" required>
+          <option value="">Selecciona un programa</option>
+          <option>Desarrollo de Software</option>
+          <option>Redes y Telecomunicaciones</option>
+          <option>Ciberseguridad</option>
+          <option>Inteligencia Artificial Aplicada</option>
+        </select>
+      </div>
+      <button class="btn-primary submit-btn" type="submit">Enviar solicitud</button>
+      <div class="confirm" id="confirmMsg">Solicitud recibida. Un asesor te contactará pronto.</div>
+    </form>
+  </div>
+</section>
 
-    Sistema de Matrícula Académica © 2026
-
+<footer id="contacto">
+  <div class="wrap foot-inner">
+    <div><b>INDER Tech</b><br>Formación técnica y tecnológica</div>
+    <div>admisiones@indertech.edu.co<br>(604) 000 0000</div>
+    <div>Calle 00 # 00-00, Medellín</div>
+  </div>
 </footer>
 
-
 <script>
-
-    const materias = document.querySelectorAll(".materia");
-
-    materias.forEach(function(materia) {
-
-        materia.addEventListener("change", actualizarResumen);
-
-    });
-
-
-    function actualizarResumen() {
-
-        let cantidad = 0;
-
-        let creditos = 0;
-
-        materias.forEach(function(materia) {
-
-            if (materia.checked) {
-
-                cantidad++;
-
-                creditos += Number(
-                    materia.dataset.creditos
-                );
-
-            }
-
-        });
-
-        document.getElementById("cantidad").textContent = cantidad;
-
-        document.getElementById("creditos").textContent = creditos;
-
-    }
-
-
-    function matricular() {
-
-        const nombre =
-            document.getElementById("nombre").value;
-
-        const documento =
-            document.getElementById("documento").value;
-
-        const programa =
-            document.getElementById("programa").value;
-
-        const semestre =
-            document.getElementById("semestre").value;
-
-        const periodo =
-            document.getElementById("periodo").value;
-
-
-        if (
-            !nombre ||
-            !documento ||
-            !programa ||
-            !semestre ||
-            !periodo
-        ) {
-
-            alert(
-                "Por favor complete todos los datos del estudiante."
-            );
-
-            return;
-
-        }
-
-
-        let seleccionadas = 0;
-
-        materias.forEach(function(materia) {
-
-            if (materia.checked) {
-
-                seleccionadas++;
-
-            }
-
-        });
-
-
-        if (seleccionadas === 0) {
-
-            alert(
-                "Debe seleccionar al menos una asignatura."
-            );
-
-            return;
-
-        }
-
-
-        document.getElementById("mensaje").textContent =
-            "✓ Matrícula registrada correctamente.";
-
-    }
-
+document.getElementById('enrollForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  document.getElementById('confirmMsg').classList.add('show');
+  this.reset();
+});
 </script>
-
 </body>
 </html>
+
 
