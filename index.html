@@ -1,36 +1,550 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technology Enrollments</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <title>Matrícula Académica - Tecnología</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background: #123c69;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            font-size: 16px;
+        }
+
+        .contenedor {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .tarjeta {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+
+        .tarjeta h2 {
+            margin-top: 0;
+            color: #123c69;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .datos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .campo label {
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .campo input,
+        .campo select {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .materias {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .materias th,
+        .materias td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .materias th {
+            background: #e9eef5;
+            color: #123c69;
+        }
+
+        .materias tr:hover {
+            background: #f8f9fa;
+        }
+
+        .resumen {
+            background: #eef5ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .boton {
+            background: #123c69;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .boton:hover {
+            background: #0d2e50;
+        }
+
+        .mensaje {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+
+            .datos {
+                grid-template-columns: 1fr;
+            }
+
+            .materias {
+                font-size: 14px;
+            }
+
+            .materias th,
+            .materias td {
+                padding: 8px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <h1>Enroll in Technology Courses</h1>
-    </header>
-    <main>
-        <form id="enrollment-form">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+<header>
 
-            <label for="courses">Select Technology Courses:</label>
-            <select id="courses" name="courses" multiple required>
-                <option value="web-development">Web Development</option>
-                <option value="data-science">Data Science</option>
-                <option value="cyber-security">Cyber Security</option>
-                <option value="cloud-computing">Cloud Computing</option>
-            </select>
+    <h1>🎓 Matrícula Académica</h1>
 
-            <button type="submit">Enroll</button>
-        </form>
-    </main>
-    <footer>
-        <p>&copy; 2023 Technology Enrollments</p>
-    </footer>
+    <p>Programa de Tecnología</p>
+
+</header>
+
+
+<div class="contenedor">
+
+
+    <!-- DATOS DEL ESTUDIANTE -->
+
+    <div class="tarjeta">
+
+        <h2>Datos del estudiante</h2>
+
+        <div class="datos">
+
+            <div class="campo">
+
+                <label>Nombre completo</label>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    placeholder="Ingrese su nombre"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Documento de identidad</label>
+
+                <input
+                    type="text"
+                    id="documento"
+                    placeholder="Ingrese su documento"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Programa académico</label>
+
+                <select id="programa">
+
+                    <option value="">Seleccione</option>
+
+                    <option>Tecnología en Sistemas</option>
+
+                    <option>Tecnología en Desarrollo de Software</option>
+
+                    <option>Tecnología en Redes</option>
+
+                    <option>Tecnología en Gestión Administrativa</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Semestre</label>
+
+                <select id="semestre">
+
+                    <option value="">Seleccione</option>
+
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Periodo académico</label>
+
+                <select id="periodo">
+
+                    <option value="">Seleccione</option>
+
+                    <option>2026-1</option>
+                    <option>2026-2</option>
+                    <option>2027-1</option>
+                    <option>2027-2</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ASIGNATURAS -->
+
+    <div class="tarjeta">
+
+        <h2>Asignaturas disponibles</h2>
+
+        <table class="materias">
+
+            <thead>
+
+                <tr>
+
+                    <th>Seleccionar</th>
+
+                    <th>Código</th>
+
+                    <th>Asignatura</th>
+
+                    <th>Créditos</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        <input
+                            type="checkbox"
+                            class="materia"
+                            data-nombre="Introducción a la Programación"
+                            data-creditos="3"
+                        >
+                    </td>
+
+                    <td>PROG101</td>
+
+                    <td>Introducción a la Programación</td>
+
+                    <td>3</td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        <input
+                            type="checkbox"
+                            class="materia"
+                            data-nombre="Bases de Datos"
+                            data-creditos="3"
+                        >
+                    </td>
+
+                    <td>BD102</td>
+
+                    <td>Bases de Datos</td>
+
+                    <td>3</td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        <input
+                            type="checkbox"
+                            class="materia"
+                            data-nombre="Redes de Computadores"
+                            data-creditos="3"
+                        >
+                    </td>
+
+                    <td>RED103</td>
+
+                    <td>Redes de Computadores</td>
+
+                    <td>3</td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        <input
+                            type="checkbox"
+                            class="materia"
+                            data-nombre="Sistemas Operativos"
+                            data-creditos="3"
+                        >
+                    </td>
+
+                    <td>SO104</td>
+
+                    <td>Sistemas Operativos</td>
+
+                    <td>3</td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        <input
+                            type="checkbox"
+                            class="materia"
+                            data-nombre="Matemáticas"
+                            data-creditos="3"
+                        >
+                    </td>
+
+                    <td>MAT105</td>
+
+                    <td>Matemáticas</td>
+
+                    <td>3</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <div class="resumen">
+
+            <strong>Resumen de matrícula</strong>
+
+            <p>
+                Materias seleccionadas:
+                <span id="cantidad">0</span>
+            </p>
+
+            <p>
+                Total de créditos:
+                <span id="creditos">0</span>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOTÓN -->
+
+    <div class="tarjeta">
+
+        <button
+            class="boton"
+            onclick="matricular()"
+        >
+            Matricular asignaturas
+        </button>
+
+        <div
+            id="mensaje"
+            class="mensaje"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    Sistema de Matrícula Académica © 2026
+
+</footer>
+
+
+<script>
+
+    const materias = document.querySelectorAll(".materia");
+
+    materias.forEach(function(materia) {
+
+        materia.addEventListener("change", actualizarResumen);
+
+    });
+
+
+    function actualizarResumen() {
+
+        let cantidad = 0;
+
+        let creditos = 0;
+
+        materias.forEach(function(materia) {
+
+            if (materia.checked) {
+
+                cantidad++;
+
+                creditos += Number(
+                    materia.dataset.creditos
+                );
+
+            }
+
+        });
+
+        document.getElementById("cantidad").textContent = cantidad;
+
+        document.getElementById("creditos").textContent = creditos;
+
+    }
+
+
+    function matricular() {
+
+        const nombre =
+            document.getElementById("nombre").value;
+
+        const documento =
+            document.getElementById("documento").value;
+
+        const programa =
+            document.getElementById("programa").value;
+
+        const semestre =
+            document.getElementById("semestre").value;
+
+        const periodo =
+            document.getElementById("periodo").value;
+
+
+        if (
+            !nombre ||
+            !documento ||
+            !programa ||
+            !semestre ||
+            !periodo
+        ) {
+
+            alert(
+                "Por favor complete todos los datos del estudiante."
+            );
+
+            return;
+
+        }
+
+
+        let seleccionadas = 0;
+
+        materias.forEach(function(materia) {
+
+            if (materia.checked) {
+
+                seleccionadas++;
+
+            }
+
+        });
+
+
+        if (seleccionadas === 0) {
+
+            alert(
+                "Debe seleccionar al menos una asignatura."
+            );
+
+            return;
+
+        }
+
+
+        document.getElementById("mensaje").textContent =
+            "✓ Matrícula registrada correctamente.";
+
+    }
+
+</script>
+
 </body>
 </html>
+
