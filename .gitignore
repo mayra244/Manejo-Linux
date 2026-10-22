@@ -1,0 +1,35 @@
+# Terraform: archivos de estado y carpetas locales
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.tfstate.lock.info
+crash.log
+crash.*.log
+
+# Variables de Terraform que pueden contener secretos
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+!*.tfvars.sample
+
+# Credenciales y secretos
+.env
+.env.*
+!.env.example
+!.env.sample
+**/.aws/
+*.pem
+*.key
+id_rsa
+id_ed25519
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+ENV/
+
+# Dependencias de Node.js
+node_modules/
