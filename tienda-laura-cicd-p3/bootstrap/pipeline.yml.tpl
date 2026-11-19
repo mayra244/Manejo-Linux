@@ -1,13 +1,18 @@
 # =====================================================================
-#  PARTE 2 · CLASE 15 · El pipeline COMPLETO: infraestructura + aplicación
-#  Lo escribió bootstrap con TUS dos roles. En la clase 15 lo copias encima de
-#  .github/workflows/pipeline.yml (PASO 7 del README).
+#  El pipeline COMPLETO de la tienda: infraestructura + aplicación + los ojos
+#  Lo escribió bootstrap con TUS dos roles (no lo edites a mano: vuelve a correr bootstrap).
+#
+#  PARTE 3 · clase 17 · lo nuevo:
+#    1 · infra      → también crea los OJOS (terraform/observabilidad.tf) y deja los logs con 7 días
+#    2 · back       → empaqueta el SDK de X-Ray junto a app.py (las trazas por tramos)
+#    3 · finalizar  → hace un pedido de prueba y espera su TRAZA en X-Ray
+#  Tu correo para las alarmas sale del secreto CORREO del repositorio (no se ve en los logs).
 #
 #  En cada PUSH A MAIN (publicar), en este orden:
 #    1 · infra      → terraform apply: crea o ajusta TODA la infraestructura
 #    2 · back       → probar · empaquetar (zip) · subir a Lambda      ┐ al mismo
 #    2 · front      → probar · empaquetar (versión) · subir a S3      ┘ tiempo
-#    3 · finalizar  → prueba la tienda EN VIVO y te deja el link
+#    3 · finalizar  → prueba la tienda EN VIVO (¿abre? ¿responde? ¿deja traza?)
 #  Si una prueba falla, esa pieza NO se publica y finalizar no corre.
 #
 #  En cada PULL REQUEST (revisar antes de unir, sin publicar nada):
@@ -49,11 +54,14 @@ jobs:
     defaults:
       run:
         working-directory: "${raiz}/terraform"
+    env:
+      TF_VAR_correo: $${{ secrets.CORREO }}   # tu correo para las alarmas (un secreto del repositorio)
     outputs:   # lo que los siguientes trabajos necesitan saber
       bucket: $${{ steps.salidas.outputs.bucket }}
       funcion: $${{ steps.salidas.outputs.funcion }}
       tienda: $${{ steps.salidas.outputs.tienda }}
       api: $${{ steps.salidas.outputs.api }}
+      tablero: $${{ steps.salidas.outputs.tablero }}
     steps:
       - name: Bajar el código del repositorio
         uses: actions/checkout@v4
@@ -76,6 +84,11 @@ jobs:
       - name: terraform init (el estado está en S3)
         run: terraform init -input=false -backend-config=backend.hcl
 
+      - name: Los logs de la Lambda (que existan y duren 7 días)
+        run: |
+          aws logs create-log-group --log-group-name /aws/lambda/tienda-cicd 2>/dev/null || echo "el grupo de logs ya existía"
+          aws logs put-retention-policy --log-group-name /aws/lambda/tienda-cicd --retention-in-days 7
+
       - name: terraform apply (toda la infraestructura)
         run: terraform apply -input=false -auto-approve
 
@@ -86,6 +99,7 @@ jobs:
           echo "funcion=$(terraform output -raw funcion)" >> "$GITHUB_OUTPUT"
           echo "tienda=$(terraform output -raw tu_tienda)" >> "$GITHUB_OUTPUT"
           echo "api=$(terraform output -raw tu_api)" >> "$GITHUB_OUTPUT"
+          echo "tablero=$(terraform output -raw tu_tablero)" >> "$GITHUB_OUTPUT"
 
   back:
     name: 2 · Back (probar, empaquetar, publicar)
@@ -100,14 +114,18 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instalar boto3
-        run: pip install boto3
+      - name: Instalar boto3 y el SDK de X-Ray
+        run: pip install boto3 -r back/requirements.txt
 
       - name: Probar el back (back/test_app.py)
         run: python -m unittest discover -s back -v
 
-      - name: Empaquetar el back (back.zip)
-        run: cd back && zip -X ../back.zip app.py
+      - name: Empaquetar el back (back.zip = app.py + el SDK de X-Ray)
+        run: |
+          pip install -r back/requirements.txt --no-deps --target paquete --quiet
+          cp back/app.py paquete/
+          cd paquete && zip -qrX ../back.zip . -x '*__pycache__*'
+          cd .. && ls -lh back.zip
 
       - name: Entrar a AWS con OIDC (sin llaves)
         uses: aws-actions/configure-aws-credentials@v4
@@ -163,10 +181,37 @@ jobs:
       - name: ¿El back responde?
         run: curl -fsS --retry 5 --retry-delay 10 --retry-all-errors "$${{ needs.infra.outputs.api }}" > /dev/null
 
+      - name: ¿Deja traza? (un pedido de prueba y su recorrido en X-Ray)
+        env:
+          API: $${{ needs.infra.outputs.api }}
+          PRUEBA: pipeline-$${{ github.run_id }}-$${{ github.run_attempt }}
+        run: |
+          # X-Ray guarda 1 petición por segundo (y el 5 % del resto): si esta no quedó guardada, se repite
+          for envio in 1 2 3 4 5; do
+            sleep 2
+            curl -fsS -X POST "$API/" -H 'content-type: application/json' \
+              -d "{\"cliente\":\"pipeline\",\"producto\":\"gorra\",\"talla\":\"M\",\"prueba\":\"$PRUEBA\"}" > pedido.json
+            python3 -c 'import json,sys; sys.exit(0 if json.load(open("pedido.json"))["muestreada"] else 1)' && break
+            echo "X-Ray no guardó esta petición: va otra"
+          done
+          for intento in $(seq 1 18); do
+            sleep 10
+            curl -fsS "$API/?observar=$PRUEBA" > traza.json || continue
+            if python3 -c 'import json,sys; t=json.load(open("traza.json"))["trazas"]; sys.exit(0 if t and any(x["nombre"]=="DynamoDB" for x in t[0]["tramos"]) else 1)'; then
+              python3 -c 'import json; t=json.load(open("traza.json"))["trazas"][0]; print("traza", t["id"], "·", t["ms"], "ms"); [print("  " * x["nivel"], x["nombre"], x["ms"], "ms") for x in t["tramos"]]'
+              echo "### 🔎 La traza del pedido de prueba llegó a X-Ray: $(python3 -c 'import json; print(json.load(open("traza.json"))["trazas"][0]["id"])')" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            echo "esperando la traza en X-Ray… ($intento de 18)"
+          done
+          echo "::error::La traza del pedido de prueba no llegó a X-Ray en 3 minutos"
+          exit 1
+
       - name: Listo
         run: |
           echo "Tienda publicada → $${{ needs.infra.outputs.tienda }}"
           echo "### 🛍️ Tienda publicada: $${{ needs.infra.outputs.tienda }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "### 📊 Tablero: $${{ needs.infra.outputs.tablero }}" >> "$GITHUB_STEP_SUMMARY"
 
   # ---------------------------------------------------------------- PULL REQUEST
   revisar:
@@ -184,7 +229,7 @@ jobs:
 
       - name: Probar el back
         run: |
-          pip install boto3
+          pip install boto3 -r back/requirements.txt
           python -m unittest discover -s back -v
 
       - name: Probar el front
@@ -207,6 +252,8 @@ jobs:
 
       - name: terraform init, fmt y validate (¿está bien escrito?)
         working-directory: "${raiz}/terraform"
+        env:
+          TF_VAR_correo: $${{ secrets.CORREO }}
         run: |
           terraform init -input=false -backend-config=backend.hcl
           terraform fmt -check -diff
@@ -214,6 +261,8 @@ jobs:
 
       - name: terraform plan (¿qué cambiaría?)
         working-directory: "${raiz}/terraform"
+        env:
+          TF_VAR_correo: $${{ secrets.CORREO }}
         run: |
           terraform plan -input=false -no-color | tee plan.txt
           {

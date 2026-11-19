@@ -13,3 +13,5 @@ __pycache__/
 *.pem
 *.ppk
 .aws/
+# lo que arma el pipeline al empaquetar el back (parte 3)
+paquete/
